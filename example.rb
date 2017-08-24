@@ -23,7 +23,7 @@ def run_example
   # Create the Resource Manager Client with an Application (service principal) token provider
   #
   subscription_id = ENV['AZURE_SUBSCRIPTION_ID'] || '11111111-1111-1111-1111-111111111111' # your Azure Subscription Id
-  provider = MsRestAzure::ApplicationTokenProvider.new(
+  provider = MsRestAzure::MSITokenProvider.new(
       ENV['AZURE_TENANT_ID'],
       ENV['AZURE_CLIENT_ID'],
       ENV['AZURE_CLIENT_SECRET'])
@@ -37,10 +37,6 @@ def run_example
   resource_group_params = Azure::ARM::Resources::Models::ResourceGroup.new.tap do |rg|
     rg.location = WEST_US
   end
-
-  # List Resource Groups
-  puts 'List Resource Groups'
-  client.resource_groups.list.each{ |group| print_item(group) }
 
   # Create Resource group
   puts 'Create Resource Group'
@@ -71,17 +67,6 @@ def run_example
                                          'azureSampleVault',
                                          '2015-06-01',
                                          key_vault_params).properties)  + "\n\n"
-
-  # List Resources within the group
-  puts 'List all of the resources within the group'
-  client.resource_groups.list_resources(GROUP_NAME).each{ |resource| print_item(resource) }
-
-  # Export the Resource group template
-  puts 'Export Resource Group Template'
-  export_params = Azure::ARM::Resources::Models::ExportTemplateRequest.new.tap do |rg|
-    rg.resources = ['*']
-  end
-  puts JSON.pretty_generate(client.resource_groups.export_template(GROUP_NAME, export_params).template) + "\n\n"
 
   # Delete Resource group and everything in it
   puts 'Delete Resource Group'

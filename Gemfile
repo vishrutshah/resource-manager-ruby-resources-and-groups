@@ -13,6 +13,6 @@ group :development, :test do
   gem 'climate_control'
 end
 
-gem 'azure_mgmt_resources', '~>0.6.0'
+gem 'ms_rest_azure', path: '/Users/vishrut/git-repos/azure-sdk-for-ruby/runtime/ms_rest_azure'
+gem 'azure_mgmt_resources', '~>0.11.0'
 gem 'haikunator',           '~>1.1'
-
